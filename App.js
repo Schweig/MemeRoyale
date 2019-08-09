@@ -23,7 +23,7 @@ const App = () => {
     <CardStack style={styles.content} ref={swiper => { this.swiper = swiper }}>
     <Card style={[styles.card, styles.card1]}><Image 
         source={{uri: 'http://www.clicktorelease.com/code/gif/1.gif'}}  
-        style={{width: 100, height:100 }} 
+        style={{width: '100%', height:'100%' }} 
     /></Card>
     <Card style={[styles.card, styles.card2]}><Text style={styles.label}>B</Text></Card>
     <Card style={[styles.card, styles.card1]}><Text style={styles.label}>C</Text></Card>
