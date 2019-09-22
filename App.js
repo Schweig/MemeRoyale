@@ -7,47 +7,63 @@
  */
 
 import React, {Fragment} from 'react';
-import { Provider, connect } from 'react-redux';
-import { createAppContainer, createStackNavigator } from 'react-navigation';
-import { createStore, combineReducers } from 'redux';
-import LoginScreen from "./src/screens/LoginScreen"
-import ContentFeed from "./src/components/ContentFeed"
+import {Provider, connect} from 'react-redux';
+import {
+  createAppContainer,
+  createStackNavigator,
+  createSwitchNavigator,
+  createBottomTabNavigator,
+} from 'react-navigation';
+import {createStore, combineReducers} from 'redux';
+import LoginScreen from './src/screens/LoginScreen';
+import SignUpScreen from './src/screens/SignUpScreen';
+import ContentFeed from './src/components/ContentFeed';
+import AuthLoading from './src/screens/AuthLoading';
+import auth from './src/redux/auth';
 
-function counter(state, action) {
-  if (typeof state === 'undefined') {
-    return 0;
-  }
+let LoginContainer = connect(state => ({auth}))(LoginScreen);
+let SignUpContainer = connect(state => ({auth}))(SignUpScreen);
+let ContentContainer = connect(state => ({auth}))(ContentFeed);
+//let CompetitionsContainer = connect(state => ({auth}))(ContentFeed);
+//let CreatorContainer = connect(state => ({auth}))(ContentFeed);
+//let SearchContainer = connect(state => ({auth}))(ContentFeed);
+let store = createStore(combineReducers({auth}));
 
-  switch (action.type) {
-    case 'INCREMENT':
-      return state + 1;
-    case 'DECREMENT':
-      return state - 1;
-    default:
-      return state;
-  }
-}
-let LoginContainer = connect(state => ({ count: state.count }))(LoginScreen);
-let ContentContainer = connect(state => ({ count: state.count }))(
-  ContentFeed
-);
-let store = createStore(combineReducers({ count: counter }));
-
-let RootStack = createStackNavigator({
-  LoginScreen: LoginContainer,
+let appTabs = createBottomTabNavigator({
   ContentFeed: ContentContainer,
+  Search: LoginContainer,
+  Competitions: LoginContainer,
+  Creator: LoginContainer,
 });
+let authStack = createStackNavigator({
+  Login: {
+    screen: LoginContainer,
+    navigationOptions: () => ({
+      header: null,
+    }),
+  },
+  SignUp: SignUpContainer,
+  Login2: LoginContainer,
+});
+let RootStack = createSwitchNavigator(
+  {
+    AuthLoading: AuthLoading,
+    Auth: authStack,
+    App: appTabs,
+  },
+  {
+    initialRouteName: 'AuthLoading',
+  },
+);
 
 let Navigation = createAppContainer(RootStack);
 
 const App = () => {
   return (
     <Provider store={store}>
-        <Navigation />
-      </Provider>
-    );
+      <Navigation />
+    </Provider>
+  );
 };
-
-
 
 export default App;
