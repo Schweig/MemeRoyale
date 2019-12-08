@@ -59,11 +59,10 @@ export default class ContentFeed extends Component {
         post:post,
         type:direction,
       });
-      this.setState({ feed: response });
       console.log(response);
       return response;
     } catch (error) {
-      console.error(error);
+      console.log(error);
     }
   }
 
@@ -86,21 +85,20 @@ export default class ContentFeed extends Component {
           {arr.map((item, index) => {
             return (
               <CardFlip
-                style={styles.card}
+                style={styles.cardContainer}
                 onSwipedRight={() => this.vote(item.id,1)}
                 onSwipedLeft={() => this.vote(item.id,0)}
-                disableTopSwipe={true}
                 key={index}
                 ref={card => (this['card' + index] = card)}
               >
                 <TouchableOpacity
-                  style={styles.card}
+                  style={[styles.card,styles.card1]}
                   onPress={() => this['card' + index].flip()}
                 >
                   <Text>{item.title}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                  style={styles.card}
+                  style={[styles.card,styles.card2]}
                   onPress={() => this['card' + index].flip()}
                 >
                   <Image
@@ -132,6 +130,10 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
+  cardContainer:{
+    width: 320,
+    height: 530,
+  },
   content: {
     flex: 5,
     alignItems: 'center',
@@ -139,7 +141,7 @@ const styles = StyleSheet.create({
   },
   card: {
     width: 320,
-    height: 470,
+    height: 530,
     backgroundColor: '#FE474C',
     borderRadius: 5,
     shadowColor: 'rgba(0,0,0,0.5)',

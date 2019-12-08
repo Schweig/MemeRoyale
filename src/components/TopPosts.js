@@ -7,6 +7,7 @@ export default class TopPosts extends Component {
     super();
     this.state = {posts:[]}
     console.log(props);
+    this.getTopPosts()
     
   }
   componentDidMount(){
