@@ -40,7 +40,7 @@ export default class ContentFeed extends Component {
 
   async getFeed() {
     try {
-      let response = await this.postData('http://10.0.2.2:3000/feed', {
+      let response = await this.postData('http://localhost:3000/feed', {
         user:
           this.state.token,
       });
@@ -53,7 +53,7 @@ export default class ContentFeed extends Component {
   }
   async vote(post,direction) {
     try {
-      let response = await this.postData('http://10.0.2.2:3000/vote', {
+      let response = await this.postData('http://localhost:3000/vote', {
         user:
           this.state.token,
         post:post,
@@ -77,6 +77,8 @@ export default class ContentFeed extends Component {
       return (
         <CardStack
           style={styles.content}
+          disableTopSwipe={true}
+          disableBottomSwipe={true}
           ref={swiper => {
             this.swiper = swiper;
           }}
@@ -86,7 +88,8 @@ export default class ContentFeed extends Component {
               <CardFlip
                 style={styles.card}
                 onSwipedRight={() => this.vote(item.id,1)}
-                onSwipedLeft={() => console.log('onSwipedLeft')}
+                onSwipedLeft={() => this.vote(item.id,0)}
+                disableTopSwipe={true}
                 key={index}
                 ref={card => (this['card' + index] = card)}
               >

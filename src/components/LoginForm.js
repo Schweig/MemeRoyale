@@ -25,7 +25,7 @@ export default class LoginForm extends Component {
   }
 
   async authenticateUser(){
-    const response = await (this.postData('http://10.0.2.2:3000/auth',{username:this.state.username,password:this.state.password}));
+    const response = await (this.postData('http://localhost:3000/auth',{username:this.state.username,password:this.state.password}));
 
     await AsyncStorage.setItem('userToken',response.token);
     this.props.navigation.navigate('AuthLoading');
