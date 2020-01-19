@@ -45,7 +45,7 @@ export default class ProfileContent extends Component {
         RNPhotoEditor.Edit({
           path: source.uri,
           onDone: ()=>{
-            console.log(source.uri)
+            console.log(source.uri);
             CameraRoll.saveToCameraRoll(source.uri, 'photo');
             this.setState((prevState)=>{
               prevState.profileCopy.picture = source.uri;
@@ -79,7 +79,7 @@ export default class ProfileContent extends Component {
               }}></Button>
             </Right>
           </Header>
-          <TouchableOpacity onPress={()=>{
+          <TouchableOpacity disabled={this.state.disabled} onPress={()=>{
             this.openImagePicker()
             ;
           }}>
