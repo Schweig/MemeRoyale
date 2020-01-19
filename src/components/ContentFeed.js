@@ -1,66 +1,47 @@
-import React, { Component } from 'react';
-import { StyleSheet, View, Image, Text, TouchableOpacity,ActivityIndicator,StatusBar,AsyncStorage } from 'react-native';
-import CardStack, { Card } from 'react-native-card-stack-swiper';
+import React, {Component} from 'react';
+import {StyleSheet, View, Image, Text, TouchableOpacity,
+  ActivityIndicator, StatusBar, AsyncStorage} from 'react-native';
+import CardStack from 'react-native-card-stack-swiper';
 import CardFlip from 'react-native-card-flip';
-
+import {postRequest} from '../utils/network';
 export default class ContentFeed extends Component {
   constructor() {
     super();
-    this.state = { key: 1, loading: true };
-
+    this.state = {key: 1, loading: true};
   }
   componentDidMount() {
     AsyncStorage.getItem('userToken').then((token) => {
       console.log(token);
       this.setState({
         loading: false,
-        token:token,
+        token: token,
       });
       this.getFeed();
     });
   }
-
-  async postData(url = '', data = {}) {
-    // Default options are marked with *
-    const response = await fetch(url, {
-      method: 'POST', // *GET, POST, PUT, DELETE, etc.
-      mode: 'cors', // no-cors, *cors, same-origin
-      cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-      credentials: 'same-origin', // include, *same-origin, omit
-      headers: {
-        'Content-Type': 'application/json',
-        // 'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      redirect: 'follow', // manual, *follow, error
-      referrer: 'no-referrer', // no-referrer, *client
-      body: JSON.stringify(data), // body data type must match "Content-Type" header
-    });
-    return await response.json(); // parses JSON response into native JavaScript objects
-  }
-
   async getFeed() {
     try {
-      let response = await this.postData('http://localhost:3000/feed', {
+      const response = await postRequest('http://localhost:3000/feed', {
         user:
           this.state.token,
       });
-      this.setState({ feed: response });
-      console.log(response);
+      const responseJson = await response.json();
+      this.setState({feed: responseJson});
       return response;
     } catch (error) {
       console.error(error);
     }
   }
-  async vote(post,direction) {
+  async vote(post, direction) {
     try {
-      let response = await this.postData('http://localhost:3000/vote', {
+      const response = await postRequest('http://localhost:3000/vote', {
         user:
           this.state.token,
-        post:post,
-        type:direction,
+        post: post,
+        type: direction,
       });
-      console.log(response);
-      return response;
+      const responseJson = await response.json();
+      return responseJson;
     } catch (error) {
       console.log(error);
     }
@@ -78,7 +59,7 @@ export default class ContentFeed extends Component {
           style={styles.content}
           disableTopSwipe={true}
           disableBottomSwipe={true}
-          ref={swiper => {
+          ref={(swiper) => {
             this.swiper = swiper;
           }}
         >
@@ -86,24 +67,24 @@ export default class ContentFeed extends Component {
             return (
               <CardFlip
                 style={styles.cardContainer}
-                onSwipedRight={() => this.vote(item.id,1)}
-                onSwipedLeft={() => this.vote(item.id,0)}
+                onSwipedRight={() => this.vote(item.id, 1)}
+                onSwipedLeft={() => this.vote(item.id, 0)}
                 key={index}
-                ref={card => (this['card' + index] = card)}
+                ref={(card) => (this['card' + index] = card)}
               >
                 <TouchableOpacity
-                  style={[styles.card,styles.card1]}
+                  style={[styles.card, styles.card1]}
                   onPress={() => this['card' + index].flip()}
                 >
                   <Text>{item.title}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                  style={[styles.card,styles.card2]}
+                  style={[styles.card, styles.card2]}
                   onPress={() => this['card' + index].flip()}
                 >
                   <Image
-                    style={{ width: '100%', height: 500 }}
-                    source={{ uri: item.link }}
+                    style={{width: '100%', height: 500}}
+                    source={{uri: item.link}}
                   />
                 </TouchableOpacity>
               </CardFlip>
@@ -130,7 +111,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
-  cardContainer:{
+  cardContainer: {
     width: 320,
     height: 530,
   },

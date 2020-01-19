@@ -6,36 +6,22 @@
  * @flow
  */
 
-import React, {Fragment} from 'react';
+import React from 'react';
 import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  View,
-  Text,
-  StatusBar,
   Image,
+  StyleSheet,
 } from 'react-native';
-import ContentFeed from '../components/ContentFeed';
 import Logo from '../components/Logo';
 import SignUpForm from '../components/SignUpForm';
 import {
   Container,
-  Header,
-  Content,
-  Form,
-  Item,
-  Input,
-  Label,
 } from 'native-base';
-import Svg, {G, Path} from 'react-native-svg';
-import Background from '../../assets/loginscreen.svg';
-const LoginScreen = props => {
+const LoginScreen = (props) => {
   return (
     <Container>
       <Image
         source={require('../../assets/loginscreen.png')}
-        style={{resizeMode: 'cover', position: 'absolute'}}
+        style={styles.background}
         width="100%"
         height="100%"
         position="absolute"
@@ -45,5 +31,10 @@ const LoginScreen = props => {
     </Container>
   );
 };
-
+const styles = StyleSheet.create({
+  background: {
+    resizeMode: 'cover',
+    position: 'absolute',
+  },
+});
 export default LoginScreen;

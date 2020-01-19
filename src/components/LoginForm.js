@@ -1,10 +1,9 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {AsyncStorage} from 'react-native';
-import { Content, Form, Item, Input, Label, Button, Text } from 'native-base';
+import {Content, Form, Item, Input, Label, Button, Text} from 'native-base';
 export default class LoginForm extends Component {
-  constructor(props){
+  constructor(props) {
     super();
-    console.log(props);
   }
   async postData(url = '', data = {}) {
     // Default options are marked with *
@@ -24,31 +23,39 @@ export default class LoginForm extends Component {
     return await response.json(); // parses JSON response into native JavaScript objects
   }
 
-  async authenticateUser(){
-    const response = await (this.postData('http://localhost:3000/auth',{username:this.state.username,password:this.state.password}));
-
-    await AsyncStorage.setItem('userToken',response.token);
+  async authenticateUser() {
+    const response = await (this.postData('http://localhost:3000/auth', {username: this.state.username, password: this.state.password}));
+    await AsyncStorage.setItem('userToken', response.token);
     this.props.navigation.navigate('AuthLoading');
   }
+  
   render() {
     return (
       <Content padder>
         <Form>
           <Item floatingLabel>
             <Label>Username</Label>
-            <Input onChangeText={(text)=>{this.setState({'username':text});}} />
+            <Input onChangeText={(text)=>{
+              this.setState({'username': text});
+            }} />
           </Item>
           <Item floatingLabel last>
             <Label>Password</Label>
-            <Input onChangeText={(text)=>{this.setState({'password':text});}}secureTextEntry={true} />
+            <Input onChangeText={(text)=>{
+              this.setState({'password': text});
+            }}secureTextEntry={true} />
           </Item>
-          <Button style={{marginTop:20,marginHorizontal:10 }} onPress={()=>{this.authenticateUser();}} block primary>
+          <Button style={{marginTop: 20, marginHorizontal: 10}} onPress={()=>{
+            this.authenticateUser();
+          }} block primary>
             <Text>Log In</Text>
           </Button>
         </Form>
-        <Button style={{marginTop:20,marginHorizontal:10 }} onPress={()=>{this.props.navigation.navigate('SignUp');}} block light>
-            <Text>Sign Up</Text>
-          </Button>
+        <Button style={{marginTop: 20, marginHorizontal: 10}} onPress={()=>{
+          this.props.navigation.navigate('SignUp');
+        }} block light>
+          <Text>Sign Up</Text>
+        </Button>
       </Content>
     );
   }

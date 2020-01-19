@@ -1,53 +1,76 @@
-import React, { Component } from 'react';
-import {AsyncStorage} from 'react-native';
-import { Content, Form, Item, Input, Label, Button, Text } from 'native-base';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import React, {Component} from 'react';
+import {StyleSheet, Image} from 'react-native';
+import {Content, Text, Card, CardItem, Right} from 'native-base';
+import {TouchableOpacity, ScrollView} from 'react-native-gesture-handler';
+import {getRequest} from '../utils/network';
+
+/**
+ * Component holding the top 15 posts
+ */
 export default class TopPosts extends Component {
-  constructor(props){
+  constructor(props) {
     super();
-    this.state = {posts:[]}
-    console.log(props);
-    this.getTopPosts()
-    
+    this.state = {posts: []};
+    this.getTopPosts();
   }
-  componentDidMount(){
-    this.getTopPosts()
+  componentDidMount() {
+    setInterval(()=>{
+      this.getTopPosts();
+    }, 60000);
   }
-  async getData(url = '') {
-    // Default options are marked with *
-    const response = await fetch(url, {
-      method: 'GET', // *GET, POST, PUT, DELETE, etc.
-      mode: 'cors', // no-cors, *cors, same-origin
-      cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-      credentials: 'same-origin', // include, *same-origin, omit
-      redirect: 'follow', // manual, *follow, error
-      referrer: 'no-referrer', // no-referrer, *client
-    });
-    return await response.json(); // parses JSON response into native JavaScript objects
-  }
-  async getTopPosts(){
-   let response = await this.getData('http://localhost:3000/top');
-   this.setState({posts:response})
+  async getTopPosts() {
+    const response = await getRequest('http://localhost:3000/top');
+    const responseJson = await response.json();
+    this.setState({posts: responseJson});
   }
   render() {
-      if(this.state.posts){      
-    return (
-      <Content style={{"height":"100%","width":"100%","backgroundColor":"#EEEEEE"}} padder>
-          {this.state.posts.map((post,idx)=>{
-            console.log(post)
-              return(<Content key={idx} style={{"paddingTop":"10%"}}padder>
-                <TouchableOpacity>
-                <Text >{post.title}</Text>
-                <Text style={{"fontSize":10}}>{post.username}</Text>
-                <Text style={{"position":"absolute","right":0,"top":20}}>Score:{post.total}</Text>
-                </TouchableOpacity>
-                </Content>)
-          })}
-      </Content>
-    )}else{
+    if (this.state.posts) {
+      return (
         <Content padder>
-            Posts not loading.
+          {this.state.posts.map((post, idx)=>{
+            return (
+              <Card key={idx} style={{height:800}}>
+                <CardItem header>
+                  <Text >{post.title}</Text>
+                </CardItem>
+                <CardItem cardBody>
+                  <Image source={{uri: post.link}} style={{height: 600, width: null, flex: 1}}/>
+                </CardItem>
+                <CardItem footer>
+                  <Text style={styles.right}>Score:{post.total}</Text>
+                  <Right>
+                    <Text style={styles.smallerText}>{post.username}</Text>
+                  </Right>
+                </CardItem>
+              </Card>
+            );
+          })}
         </Content>
+      );
+    } else {
+      <Content padder>
+        <Text>Posts not loading.</Text>
+      </Content>;
     }
   }
 }
+const lightblue = 'lightblue';
+const grey = 'grey';
+const styles = StyleSheet.create({
+  right: {
+    alignSelf: 'flex-end',
+
+  },
+  scoresContainer: {
+    display: 'flex',
+
+  },
+  smallerText: {
+    fontSize: 10,
+  },
+  postItem: {
+    backgroundColor: grey,
+    paddingTop: '10%',
+  },
+
+});

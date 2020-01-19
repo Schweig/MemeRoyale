@@ -6,13 +6,14 @@
  * @flow
  */
 
-import React, {Fragment} from 'react';
+import React from 'react';
 import {Provider, connect} from 'react-redux';
 import {
   createAppContainer,
   createStackNavigator,
   createSwitchNavigator,
   createBottomTabNavigator,
+  createDrawerNavigator,
 } from 'react-navigation';
 import {createStore, combineReducers} from 'redux';
 import LoginScreen from './src/screens/LoginScreen';
@@ -20,24 +21,23 @@ import SignUpScreen from './src/screens/SignUpScreen';
 import ContentFeed from './src/components/ContentFeed';
 import AuthLoading from './src/screens/AuthLoading';
 import TopScreens from './src/screens/TopScreen';
+import ProfileScreen from './src/screens/ProfileScreen';
 import auth from './src/redux/auth';
 
-let LoginContainer = connect(state => ({auth}))(LoginScreen);
-let SignUpContainer = connect(state => ({auth}))(SignUpScreen);
-let ContentContainer = connect(state => ({auth}))(ContentFeed);
-let TopContainer = connect(state => ({auth}))(TopScreens);
-//let CompetitionsContainer = connect(state => ({auth}))(ContentFeed);
-//let CreatorContainer = connect(state => ({auth}))(ContentFeed);
-//let SearchContainer = connect(state => ({auth}))(ContentFeed);
-let store = createStore(combineReducers({auth}));
+const LoginContainer = connect((state) => ({auth}))(LoginScreen);
+const SignUpContainer = connect((state) => ({auth}))(SignUpScreen);
+const ContentContainer = connect((state) => ({auth}))(ContentFeed);
+const TopContainer = connect((state) => ({auth}))(TopScreens);
+const ProfileContainer = connect((state)=>({auth}))(ProfileScreen);
+const store = createStore(combineReducers({auth}));
 
-let appTabs = createBottomTabNavigator({
+const appTabs = createBottomTabNavigator({
   ContentFeed: ContentContainer,
   Top: TopContainer,
   Competitions: LoginContainer,
   Creator: LoginContainer,
 });
-let authStack = createStackNavigator({
+const authStack = createStackNavigator({
   Login: {
     screen: LoginContainer,
     navigationOptions: () => ({
@@ -47,18 +47,23 @@ let authStack = createStackNavigator({
   SignUp: SignUpContainer,
   Login2: LoginContainer,
 });
-let RootStack = createSwitchNavigator(
-  {
-    AuthLoading: AuthLoading,
-    Auth: authStack,
-    App: appTabs,
-  },
-  {
-    initialRouteName: 'AuthLoading',
-  },
+const appDrawer = createDrawerNavigator({
+  App: appTabs,
+  Profile: ProfileContainer,
+});
+const RootStack = createSwitchNavigator(
+    {
+      AuthLoading: AuthLoading,
+      Auth: authStack,
+      App: appDrawer,
+    },
+    {
+      initialRouteName: 'AuthLoading',
+    },
 );
 
-let Navigation = createAppContainer(RootStack);
+
+const Navigation = createAppContainer(RootStack);
 
 const App = () => {
   return (
