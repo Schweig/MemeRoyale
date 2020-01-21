@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
-import {StyleSheet, View, Image, AsyncStorage} from 'react-native';
+import {StyleSheet, AsyncStorage} from 'react-native';
 import CameraRoll from '@react-native-community/cameraroll';
-import {Form, Item, Icon, Input, Label, Text, Content, Header, Left, Right, Button} from 'native-base';
+import {Form, Item, Input, Label, Text, Content, Header, Left, Right, Button} from 'native-base';
 import ProfileImage from '../components/ProfileImage';
-import {postRequest, getRequest} from '../utils/network';
+import {postRequest} from '../utils/network';
 import ImagePicker from 'react-native-image-picker';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {RNPhotoEditor} from 'react-native-photo-editor';
@@ -87,7 +87,7 @@ export default class ProfileContent extends Component {
           </TouchableOpacity>
           <Form>
             <Item stackedLabel>
-              <Label>Username</Label>
+              <Label><Text>Username</Text></Label>
               <Input disabled={this.state.disabled} placeholder='Disabled Textbox' value={profile.username} onChangeText={(text) =>{
                 this.setState((prevState) => {
                   const profileCopy = Object.assign({}, prevState.profileCopy);
@@ -98,7 +98,7 @@ export default class ProfileContent extends Component {
               }}/>
             </Item>
             <Item stackedLabel >
-              <Label>Email</Label>
+              <Label><Text>Email</Text></Label>
               <Input disabled={this.state.disabled} placeholder='Disabled Textbox' value={profile.email} onChangeText={(text) =>{
                 this.setState((prevState) => {
                   const profileCopy = Object.assign({}, prevState.profileCopy);
@@ -109,11 +109,11 @@ export default class ProfileContent extends Component {
               }}/>
             </Item>
             <Item stackedLabel>
-              <Label>Level</Label>
+              <Label><Text>Level</Text></Label>
               <Input disabled={this.state.disabled} placeholder='Disabled Textbox' value={profile.level}/>
             </Item>
             <Item stackedLabel>
-              <Label>Birthday</Label>
+              <Label><Text>Birthday</Text></Label>
               <Input disabled={this.state.disabled} placeholder='Disabled Textbox' value={this.state.profile.birthday}/>
             </Item>
           </Form>
