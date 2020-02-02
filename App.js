@@ -22,6 +22,7 @@ import ContentFeed from './src/components/ContentFeed';
 import AuthLoading from './src/screens/AuthLoading';
 import TopScreens from './src/screens/TopScreen';
 import ProfileScreen from './src/screens/ProfileScreen';
+import CreatorScreen from './src/screens/CreatorScreen';
 import auth from './src/redux/auth';
 
 const LoginContainer = connect((state) => ({auth}))(LoginScreen);
@@ -29,13 +30,14 @@ const SignUpContainer = connect((state) => ({auth}))(SignUpScreen);
 const ContentContainer = connect((state) => ({auth}))(ContentFeed);
 const TopContainer = connect((state) => ({auth}))(TopScreens);
 const ProfileContainer = connect((state)=>({auth}))(ProfileScreen);
+const CreatorContainer = connect((state)=>({auth}))(CreatorScreen);
 const store = createStore(combineReducers({auth}));
 
 const appTabs = createBottomTabNavigator({
   ContentFeed: ContentContainer,
   Top: TopContainer,
   Competitions: LoginContainer,
-  Creator: LoginContainer,
+  Creator: CreatorContainer,
 });
 const authStack = createStackNavigator({
   Login: {
